@@ -1,0 +1,29 @@
+#!/usr/bin/python
+from PIL import Image
+import sys
+
+def analisis_rojo(picture):
+    
+    image = Image.open(picture)
+
+    total_pixel = image.size[0]*image.size[1]
+
+    pic = image.load()
+
+    for i in range(image.size[0]):
+        for j in range(image.size[1]):
+
+            (R, G, B) = pic[i,j]
+            
+            R = R&int("00000001",2)
+            escala = float(R)/2
+            G = B = R =int(255*escala)
+
+            pic[i,j] = (R, G, B)
+
+    image.save(picture+"_Rojo.png","PNG")
+
+def main():
+    analisis_rojo(sys.argv[1])
+
+main()
