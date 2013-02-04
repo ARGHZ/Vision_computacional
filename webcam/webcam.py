@@ -66,9 +66,9 @@ def vision(image):
 
     const = 11.0
 #    kernel = [[1.0/const, 2.0/const, 1.0/const], [2.0/const, 4.0/const, 2.0/const], [1.0/const, 2.0/const, 1.0/const]] # Gaussian mask
-    kernel = [[0.0, 1.0, 1.0], [-1.0, 0.0, 1.0], [-1.0, -1.0, 0.0]] # Diagonal prewit
-#    return filtering(kernel, mat)
-    return median_filter(mat)
+#    kernel = [[0.0, 1.0, 1.0], [-1.0, 0.0, 1.0], [-1.0, -1.0, 0.0]] # Diagonal prewit
+    return filtering(kernel, mat)
+#    return median_filter(mat)
 #    return filtering(kernel, median_filter(mat))
 
 def show_by(image, secs=10):
