@@ -122,6 +122,7 @@ def main():
         frame = cv.QueryFrame(camcapture)
 
 	if frame is None:
+            print "Error al leer el frame"
             break
 
         if not frame_copy:

@@ -2,14 +2,14 @@
 from PIL import Image
 import sys, time
 
-def filtros(picture):
-    
-    image = Image.open(picture)
-    total_pixel = image.size[0]*image.size[1]
-    pic = image.load()
-    image_name = ".png"#(time.ctime().replace(" ", "_"))+".png"
+efecto = {
+    "grayscale":escala_grises,
+    "umbral":filtro_umbral,
+    "media":filtro_media
+    }
 
-    # Obtener escala de grises 8bits de RGB 32 bits
+def escala_grises(image):
+    pic = image.load()
     for i in range(image.size[0]):
         for j in range(image.size[1]):
 
@@ -18,15 +18,14 @@ def filtros(picture):
             intensity = int((R+G+B)/3)
             R = G = B = intensity
             pic[i,j] = (R, G, B)
+    return pic
 
-    image.save("grayscale_"+image_name,"PNG")
-
-    # Umbral filtro
+def filtro_umbral(image):
+    pic = image.load()
     for i in range(image.size[0]):
         for j in range(image.size[1]):
 
             (R, G, B) = pic[i,j]
-            # Grayscale
             intensity = R
             if intensity < 128:
                 intensity = 0
@@ -34,10 +33,10 @@ def filtros(picture):
                 intensity = 255
             R = G = B = intensity
             pic[i,j] = (R, G, B)
+    return pic
 
-    image.save("umbral_"+image_name,"PNG")
-
-    # Median Filter
+def filtro_media(image):
+    pic = image.load()
     for i in range(image.size[0]):
         for j in range(image.size[1]):
 
@@ -50,11 +49,29 @@ def filtros(picture):
             temp.sort()
             R = G = B = int(temp[int(len(temp)/2)])
             pic[i,j] = (R, G, B)
+    return pic
 
-    image.save("median_filter_"+image_name,"PNG")
+def generar_sal_y_pimienta(image):
+    pic = image.load()
+    for i in range(image.size[0]):
+        for j in range(image.size[1]):
+            (R, G, B) = pic[i,j]
+            pic[i,j] = (R, G, B)
 
+def diferencia_media_grises(image):
+    pic = image.load()
+    for i in range(image.size[0]):
+        for j in range(image.size[1]):
+            (R, G, B) = pic[i,j]
+            pic[i,j] = (R, G, B)
+    
+def aplicar_efecto(nImagen, nOutput, aplicar_efectos=[])
+    image = Image.open(picture)
+    for i in aplicar_efectos:
+        pic = efecto[i](pic)
+    image.save(nOutput)
 
 def main():
-    filtros(sys.argv[1])
+    aplicar_efecto("yo.jpg", "output.jpg", ["grayscale"])
 
 main()
