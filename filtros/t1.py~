@@ -15,6 +15,7 @@ def escala_grises(image):
     return pic
 
 def filtro_umbral(image):
+    escala_grises(image)
     pic = image.load()
     for i in range(image.size[0]):
         for j in range(image.size[1]):
@@ -63,6 +64,6 @@ def main():
     aplicar_efecto(sys.argv[1], "grayscale"+"_"+sys.argv[1], ["grayscale"])
     aplicar_efecto(sys.argv[1], "umbral"+"_"+sys.argv[1], ["umbral"])
     aplicar_efecto(sys.argv[1], "media"+"_"+sys.argv[1], ["media"])
-    aplicar_efecto(sys.argv[1], "todos"+"_"+sys.argv[1], ["media"])
+    aplicar_efecto(sys.argv[1], "todos"+"_"+sys.argv[1], ["media", "grayscale", "umbral"])
     
 main()

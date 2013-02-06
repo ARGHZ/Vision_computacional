@@ -15,6 +15,7 @@ def escala_grises(image):
     return pic
 
 def filtro_umbral(image):
+    escala_grises(image)
     pic = image.load()
     for i in range(image.size[0]):
         for j in range(image.size[1]):
