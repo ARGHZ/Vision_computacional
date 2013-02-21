@@ -45,6 +45,8 @@ def main(output="output.png"):
 
     filtros.filtro_promedio(image)
     filtros.filtro_umbral(image, umbral=40)
+    image.save(output)
+    return
 
     color = (0,0,255)
     centroids = list()

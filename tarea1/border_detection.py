@@ -182,7 +182,7 @@ def border_detection(picture, output="output.png"):
     del imagey
 
     pseudo_promedio = normalizar(border, max_values)
-    filtro_umbral(border, umbral=80)
+    filtro_umbral(border, umbral=int(sys.argv[2]))
     
     border.save(output)    
 
