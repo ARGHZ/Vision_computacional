@@ -17,9 +17,7 @@ class Filtros:
         self.indice_mascara = {
             "gaussian":[[1.0, 2.0, 1.0], [2.0, 4.0, 2.0], [1.0, 2.0, 1.0]],
             "sobelx":[[-1.0, 0.0, 1.0], [-2.0, 0.0, 2.0], [-1.0, 0.0, 1.0]],
-            "sobely":[[1.0, 2.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -2.0, -1.0]],
-            "prewittx":[[-1.0, 0.0, 1.0], [-1.0, 0.0, 1.0], [-1.0, 0.0, 1.0]],
-            "prewitty":[[1.0, 1.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -1.0, -1.0]]
+            "sobely":[[1.0, 2.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -2.0, -1.0]]
             }
 
     def aplicar_efecto(self, nImagen, nOutput, aplicar_efectos=[]):
@@ -28,6 +26,19 @@ class Filtros:
         for i in aplicar_efectos:
             pic = efecto[i](image)
         image.save(nOutput)
+
+    def aplicar_mascara(self, nImagen, mascara=[], const=[], nOutput="output.jpg", image=None, cmd=""):
+        if image == None:
+            image = Image.open(nImagen)
+        for i in range(len(mascara)):
+            kernel = self.matrix_copy(self.indice_mascara[mascara[i]])
+            kernel = self.multiplicar_mascara(kernel, const[i])
+            self.convolucion(kernel, image)
+
+        if cmd == "i":
+            return image
+        else:
+            image.save(nOutput)
 
 ###################################################################
 # Filtros 
@@ -178,7 +189,6 @@ class Filtros:
     def convolucion(self, kernel, image):
         pic = image.load()
         pic_copy = (image.copy()).load()
-        res = dict()
         for i in range(image.size[0]):
             for j in range(image.size[1]):
 
@@ -194,42 +204,14 @@ class Filtros:
                             sumatory[1] += pixel[1]*kernel[int(kernel_pos/3)][kernel_pos%3]
                             sumatory[2] += pixel[2]*kernel[int(kernel_pos/3)][kernel_pos%3]
                             kernel_pos += 1
-                res[i, j] = (int(sumatory[0]), int(sumatory[1]), int(sumatory[2]))
-        return res
+
+                pic[i, j] = (int(sumatory[0]), int(sumatory[1]), int(sumatory[2]))
             
     def multiplicar_mascara(self, kernel, const):
         for i in range(len(kernel)):
             for j in range(len(kernel[0])):
                 kernel[i][j] *= const
         return kernel
-
-    def aplicar_mascara(self, nImagen, mascara=[], const=[], nOutput="output.jpg", image=None, cmd=""):
-        if image == None:
-            image = Image.open(nImagen)
-        for i in range(len(mascara)):
-            kernel = self.matrix_copy(self.indice_mascara[mascara[i]])
-            kernel = self.multiplicar_mascara(kernel, const[i])
-            res = self.convolucion(kernel, image)
-            
-        if cmd == "i":
-            return res
-        else:
-            pass
-
-    def filtro_umbral(self, image, umbral=128):
-        pic = image.load()
-        for i in range(image.size[0]):
-            for j in range(image.size[1]):
-
-                colors = list(pic[i,j])
-                for h in range(len(colors)):
-                    if colors[h] < umbral:
-                        colors[h] = 0
-                    else:
-                        colors[h] = 255
-                pic[i,j] = tuple(colors)
-        return pic
-
 
 def filtro_promedio(image):
     pic = image.load()
@@ -249,6 +231,20 @@ def filtro_promedio(image):
                         temp[2] += B
                         contador += 1
             pic[i,j] = ( int(temp[0]/contador), int(temp[0]/contador), int(temp[0]/contador))
+    return pic
+
+def filtro_umbral(image, umbral=128):
+    pic = image.load()
+    for i in range(image.size[0]):
+        for j in range(image.size[1]):
+
+            colors = list(pic[i,j])
+            for h in range(len(colors)):
+                if colors[h] < umbral:
+                    colors[h] = 0
+                else:
+                    colors[h] = 255
+            pic[i,j] = tuple(colors)
     return pic
 
 #def main():
