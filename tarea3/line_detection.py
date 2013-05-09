@@ -67,7 +67,6 @@ def line_detection(image_name, output="output.png"):
     image = Image.open(image_name)
     line_matrix, frequency = calculate_line_values(imagex, imagey,  image, saltos_ro=5, saltos_angulo=5, bias=10.0)
 
-#    print "numero de grupos:", len(frequency.keys())
     f = list()
     for i in frequency.keys():
         if frequency[i] < 5:
@@ -75,9 +74,6 @@ def line_detection(image_name, output="output.png"):
         else:
             f.append(frequency[i])
     f.sort()
-#    for i in f:
-#        print i 
-            
 
     draw_lines(image, frequency, line_matrix)
     image.save(output)

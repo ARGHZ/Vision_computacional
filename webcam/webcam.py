@@ -1,3 +1,4 @@
+#! /usr/bin/python
 import Image, cv, cv2, time, sys
 
 """
